@@ -1,4 +1,3 @@
-// var add = "wss://sparkling-lively-thunder.bsc.quiknode.pro/07fd71e94b68817b6a596dc947910035f41d7382/"
 var Web3 = require("web3");
 const axios = require('axios');
 const fetch = require('node-fetch');
