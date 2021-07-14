@@ -1,15 +1,16 @@
-// var add = "wss://sparkling-lively-thunder.bsc.quiknode.pro/07fd71e94b68817b6a596dc947910035f41d7382/"
 const config = require("./config");
 var Web3 = require("web3");
 const axios = require('axios');
 const fetch = require('node-fetch');
 let settings = { method: "Get" };
-let allAddress = [];
-let socket; 
-let toBlock; 
-let fromBlock; 
-let address; 
-let abi;
+var allAddress = [];
+var socket; 
+var toBlock; 
+var fromBlock; 
+var address; 
+var abi;
+var contract;
+var web3
 
 var options = {
   timeout: 600000, // ms
@@ -36,8 +37,8 @@ async function main(network) {
     socket = config.pancakeswap.socket;
     toBlock = config.pancakeswap.toBlock;
     fromBlock = config.pancakeswap.fromBlock;
-    address = config.pancakeswap.address;
-    abi = config.pancakeswap.abi;
+    address = config.pancakeswap.contractAddress;
+    abi = config.pancakeswap.contractAbi;
 
   }
   else if(network=="uniswap"){
@@ -45,13 +46,13 @@ async function main(network) {
     socket = config.uniswap.socket;
     toBlock = config.uniswap.toBlock;
     fromBlock = config.uniswap.fromBlock;
-    address = config.uniswap.address;
-    abi = config.uniswap.abi;
+    address = config.uniswap.contractAddress;
+    abi = config.uniswap.contractAbi;
 
   }
 
-  var web3 = new Web3(new Web3.providers.WebsocketProvider(socket, options));
-  var contract = new web3.eth.Contract(abi, address);
+  web3 = await new Web3(new Web3.providers.WebsocketProvider(socket, options));
+  contract = await new web3.eth.Contract(abi, address);
 
   setTimeout(async () => {
     try {
@@ -61,7 +62,7 @@ async function main(network) {
           toBlock: toBlock
       }, async function(error, events){
         //console.log(events)
-        custom(events);
+        await custom(events);
         //console.log(events);
       });
     } catch (err) {
